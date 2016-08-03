@@ -23,7 +23,8 @@
 #define KCYN  "\x1B[36m"
 #define KWHT  "\x1B[37m"
 
-void new_game(int argc, char argv);
+typedef enum {false, true} bool;
+void new_game();
 void flag_mode();
 void end_of_game();
 void check_mode();
@@ -263,13 +264,10 @@ void flag_mode() {
 /**
 	@breif °ÔÀÓ œÃÀÛ
 */
-void new_game(int argc, char* argv[]) {
-	int first = argc;
-	argv = argv;
+void new_game() {
+
 	Numberof_Mines = 10;
-	if (argc == 2) {
-		Numberof_Mines = atoi(argv[1]);
-	}
+
 	// random seed
 	srand(time(NULL));
 
@@ -286,7 +284,7 @@ void new_game(int argc, char* argv[]) {
 		/* initialize random seed: */
 
 		// It generates a integer in the range 0 to 9
-		r = rand() % 10;					
+		r = rand() % 10;
 		c = rand() % 10;
 
 		// put mines
@@ -314,7 +312,7 @@ void new_game(int argc, char* argv[]) {
 			for (j = 0; j < 8; j++) {
 				value = table_array[rows[j]][columns[j]];
 				Is_valid_rows_and_column = (rows[j] >= 0 && rows[j] < MAX) && (columns[j] >= 0 && columns[j] < MAX);
-				
+
 				if (Is_valid_rows_and_column) {	// to prevent negative index and out of bounds
 					if (value != 99)			// to prevent remove mines
 						table_array[rows[j]][columns[j]] += 1;		// sums 1 to each adjacent cell
@@ -326,7 +324,7 @@ void new_game(int argc, char* argv[]) {
 			continue;
 		}
 	}
-		
+
 	while (Numberof_Mines != 0) {			// when Numberof_Mines becomes 0 you will win the game
 		print_table();
 		Cursor_direction = getch();
@@ -346,7 +344,7 @@ void new_game(int argc, char* argv[]) {
 			// jump to a new game
 		case 'n':
 		case 'N':
-			new_game(first, argv);
+			new_game();
 			// exit
 		case 'q':
 		case 'Q':
@@ -360,7 +358,7 @@ void new_game(int argc, char* argv[]) {
 
 
 int main(int argc, char *argv[]) {
-	new_game(argc, argv);
+	new_game();
 
 	return 0;
 }

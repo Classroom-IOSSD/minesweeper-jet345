@@ -24,27 +24,24 @@ char getch_(int echo)
     char ch;
     initTermios(echo);
     ch = getchar();
-    if(ch == '\x1b')
-        {
-            if(getchar()=='[')
-                {
-                    switch(getchar())
-                        {
-                        case 'A':
-                            ch = '8';
-                            break;
-                        case 'B':
-                            ch = '2';
-                            break;
-                        case 'C':
-                            ch = '6';
-                            break;
-                        case 'D':
-                            ch = '4';
-                            break;
-                        }
-                }
+    if(ch == '\x1b') {
+        if(getchar()=='[') {
+            switch(getchar()) {
+            case 'A':
+                ch = '8';
+                break;
+            case 'B':
+                ch = '2';
+                break;
+            case 'C':
+                ch = '6';
+                break;
+            case 'D':
+                ch = '4';
+                break;
+            }
         }
+    }
     resetTermios();
     return ch;
 }

@@ -32,8 +32,7 @@ int x=0, y=0;
 int game_mode=0;
 
 /*This is a recursive function which uncovers blank cells while they are adjacent*/
-int uncover_blank_cell(int row, int col)
-{
+int uncover_blank_cell(int row, int col) {
     int value, rows[8], columns[8], i;
 
     if(table_array[row][col] != 0)
@@ -74,8 +73,7 @@ int uncover_blank_cell(int row, int col)
     return 1; // success!
 }
 
-void print_table()
-{
+void print_table() {
     // clear screen
     system("clear");
 
@@ -124,8 +122,7 @@ void print_table()
 }
 
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 
     char ch;
     int nMines; // the number of the remaining mines

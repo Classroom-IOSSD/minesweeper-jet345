@@ -22,6 +22,15 @@
 #define KCYN  "\x1B[36m"
 #define KWHT  "\x1B[37m"
 
+ #define BIT(x) (0x01 << (x)) 
+ #define BITMASK_SET(x,y) ((x) |= (y))
+ #define BITMASK_CLEAR(x,y) ((x) &= (~(y)))
+ #define BITMASK_FLIP(x,y) ((x) ^= (y))
+ #define BITMASK_CHECK(x,y) (((x) & (y)) == (y))
+
+const unsigned int FLAG_MASK = BIT(4);
+const unsigned int UNCOVERED_MASK = BIT(5);
+const unsigned int MINE_MASK = BIT(6);
 
 // global variables
 // game table
@@ -30,6 +39,21 @@ unsigned char table_array[MAX][MAX];
 int x=0, y=0;
 // flag: input mode = 0, flag mode = 1, check mode = 2
 int game_mode=0;
+
+inline _Bool has_mine(unsigned int cell){
+	return BITMASK_CHECK(cell, MINE_MASK);
+}
+
+inline void put_mine(unsigned int cell){
+	//NOW THIS CELL WILL BE BOMB!
+	BITMASK_SET(cell, MINE_MASK);
+}
+inline unsigned int num_mines(unsigned int cell){
+	//check true or false 
+}
+
+
+
 
 /*This is a recursive function which uncovers blank cells while they are adjacent*/
 int uncover_blank_cell(int row, int col) {
@@ -91,11 +115,11 @@ void print_table() {
 
             }
             value = table_array[i][j];
-
+            //printf("value = %d",value);
             if((value >= 0 && value <= 8) || value == 0 || value == 99)
                 printf("|X");
             else if(value == 10) // clean area
-                printf("|%s%d%s",KCYN, value - 10,KNRM);
+                printf("|%s%d%s",KCYN, value - 10,KNRM);            	
             else if(value == 11) // the number of near mine is 1
                 printf("|%s%d%s",KYEL, value - 10,KNRM);
             else if(value > 11 && value <= 18) // the number of near mine is greater than 1
@@ -117,8 +141,17 @@ void print_table() {
     } else if(game_mode == 2) {
         printf("Enter (select to check cell), q (Exit selection): ");
     }
+}
 
-
+void print_real_table(){
+	printf("\n");
+	int i,j;
+	for(i=0; i<MAX ; i++){
+		for(j=0; j<MAX ; j++){
+			printf(" %d ",table_array[i][j]);
+		}
+		printf("\n");
+	}
 }
 
 
@@ -127,6 +160,7 @@ int main(int argc, char *argv[]) {
     char ch;
     int nMines; // the number of the remaining mines
     int i,j,r,c,value, rows[8], columns[8];
+    
 
 new_game:
     // the number of mines
@@ -188,7 +222,7 @@ new_game:
     //
     while(nMines != 0) {			// when nMines becomes 0 you will win the game
         print_table();
-
+        print_real_table();
         ch = getch();
         // cursor direction
         char direction;
@@ -290,6 +324,7 @@ check_mode:
         case 'q':
         case 'Q':
             goto end_of_game;
+
 
         default:
             break;
